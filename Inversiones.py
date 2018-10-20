@@ -2,6 +2,7 @@ import os
 from product import prices
 
 choice = None
+clientList = []
 
 def listProducts():
 	print("\t"+"="*32)
@@ -33,18 +34,19 @@ class Client(object):
 		self.total =      []
 		self.subtotal =   []
 		self.product =    []
-		self.clientList = []
 	
 
 	def getName(self):
 		return self.name
-	
+
+
 	def getApellido(self):
 		return self.apellido
 
+
 	def getPhone(self):
 		return self.phone
-	
+
 
 	def getAddress(self):
 		return self.address
@@ -104,6 +106,7 @@ class Client(object):
 	def rentProduct(self):
 		listProducts()
 		press = None
+		global clientList
 		
 		while press != 'n':
 			product = str(input("\nPRODUCTO: "))
@@ -122,7 +125,7 @@ class Client(object):
 		print("===============================")
 		
 		self.func(self.wallet)
-		self.clientList.append(Client)
+		clientList.append(Client)
 		input("\nPresionar enter...")
 		clear()
 		self.printInformation()
@@ -137,21 +140,25 @@ class Client(object):
 
 
 	def findClient(self, name=None, apellido=None, phone=None):
-		print("""
-	BUSCAR AL CLIENTE POR:
-
-	1) Nombre
-	2) Apellido
-	3) Telefono""")
+		global clienList
+		print("BUSCAR AL CLIENTE POR:\n")
+		print(" 1) Nombre\n 2) Apellido\n 3) Telefono")
+		print("\n===============================")
 
 		select = int(input("Opcion: "))
 		if select == 1:
 			name = str(input("Escriba el nombre del cliente: "))
-			for a in self.clientList:
-				if a.getName() == name:
-					print("Cliente encontrado")
-				else:
-					print("No funciona") 
+			try:
+				print("Buscando...")
+				print(clientList[:])
+				for client in clientList:
+					print("CLIENTE",client)
+					if client.getName() == name:
+						print("Cliente encontrado")
+					else:
+						print("Cliente no encontrado.")
+			except:
+				print("No funciona")
 		elif select == 2:
 			pass
 		elif select == 3:
@@ -199,3 +206,4 @@ clear()
 print("""+==============================+
 | SISTEMA CERRADO EXITOSAMENTE |
 +==============================+""")
+
