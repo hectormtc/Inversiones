@@ -1,20 +1,8 @@
 import os
+from product import prices
+
 choice = None
 
-prices = {
-	"sillaplastica"   : 4,
-	"sillametalica"   : 5,
-	"buffetmediana"   : 10,
-	"buffetgrande"    : 20,
-	"mantelredondo8"  : 10,
-	"mantelredondo10" : 15,
-	"sobremantel10"   : 15,
-	"sobremantel8"    : 10,
-	"mantelcuadrado"  : 50,
-	"mesacuadrada"    : 20,
-	"mesaredonda8"    : 20,
-	"mesaredonda10"   : 25
-}
 def listProducts():
 	print("\t"+"="*32)
 	print("""\tPRODUCTO\t| PRECIO""")
@@ -25,47 +13,73 @@ def listProducts():
 	print("\t"+"="*32)
 	input("Presionar enter...")
 
+
 def clear():
 	os.system('clear')
+
 clear()
+
 
 class Client(object):
 	
-	STATE = False	
+	STATE = None
 	
 	def __init__(self):
-		self.client = str(input("Nombre del cliente: "))
-		self.phone = int(input("Celular/Telefono: "))
-		self.address = str(input("Direccion: "))
-		self.deposit = int(input("Deposito: "))
-		self.wallet = []
-		self.total = []
-		self.product = []
+		self.name =       None
+		self.apellido =   None
+		self.address =    None
+		self.deposit =    None
+		self.wallet =     []
+		self.total =      []
+		self.subtotal =   []
+		self.product =    []
+		self.clientList = []
 	
-	def getClient(self):
-		return self.client
+
+	def getName(self):
+		return self.name
 	
+	def getApellido(self):
+		return self.apellido
+
 	def getPhone(self):
 		return self.phone
 	
+
 	def getAddress(self):
 		return self.address
 	
+
 	def getDeposit(self):
 		return self.deposit
 
+
+	def setState(self, state):
+		Client.State = state
+
+
+	def getState(self):
+		if Client.State == True:
+			return str("En alquiler")
+		elif Client.State == False:
+			return str("Entregado")
+
+
 	def inputClient(self):
-		self.client = str(input("Nombre del cliente: "))
+		self.name = str(input("Nombre del cliente: "))
+		self.apellido = str(input("Apellido del cliente: "))
 		self.phone = int(input("Celular/Telefono: "))
 		self.address = str(input("Direccion: "))
 		self.deposit = int(input("Deposito: "))
 
+
 	def newRent(self):
-		print("\n==========NUEVA RENTA==========\n")
+		self.inputClient()
 		self.rentProduct()
 		print("===============================")
 		print("\tALQUILER AGREGADO")
 		print("===============================")
+
 
 	def func(self, wallet):
 		for item in wallet:
@@ -75,33 +89,73 @@ class Client(object):
 				self.product.append(item)
 		
 		printItems = zip(self.total, self.product)
+
 		print("PRODUCTO\t| Cantidad")
 		print("===============================")
+		
 		for t, p in printItems:
-			print(str(p),"\t ",str(t))
-		total = sum(self.total)	
-		print("\tTOTAL:   ",str(total),"lps.")
+			print(str(p), "\t ", str(t),"\t ")
+
+		print("\tTOTAL:   ",sum(self.subtotal),"lps.")
 		print("===============================")
+		self.setState(True)
+
 
 	def rentProduct(self):
-		press = input("Agregar producto?(s/n): ")
+		listProducts()
+		press = None
+		
 		while press != 'n':
-			listProducts()
-			product = str(input("PRODUCTO: "))
+			product = str(input("\nPRODUCTO: "))
 			cantidad = int(input("CANTIDAD: "))
 			if product in prices:
 				self.wallet.append(product)
 				self.wallet.append(cantidad)
+				self.subtotal.append(prices[product] * cantidad)
 			else:
 				print("Producto no existe\n")
 				press = input("Agregar producto...(s/n): ")
 			press = input("Adicionar mas producto?(s/n): ")
+		
 		print("\n===============================")		
 		print("\tALQUILER: ")
 		print("===============================")
+		
 		self.func(self.wallet)
+		self.clientList.append(Client)
 		input("\nPresionar enter...")
 		clear()
+		self.printInformation()
+
+	def printInformation(self):
+		print("\n===============================")
+		print("Nombre:", self.getName(), self.getApellido())
+		print("Telefono/Celular:", self.getPhone())
+		print("Direccion:", self.getAddress())
+		print("Deposito:", self.getDeposit())
+		print("Estado:", self.getState())
+
+
+	def findClient(self, name=None, apellido=None, phone=None):
+		print("""
+	BUSCAR AL CLIENTE POR:
+
+	1) Nombre
+	2) Apellido
+	3) Telefono""")
+
+		select = int(input("Opcion: "))
+		if select == 1:
+			name = str(input("Escriba el nombre del cliente: "))
+			for a in self.clientList:
+				if a.getName() == name:
+					print("Cliente encontrado")
+				else:
+					print("No funciona") 
+		elif select == 2:
+			pass
+		elif select == 3:
+			pass
 
 while choice != 6:
 	print("""
@@ -118,7 +172,9 @@ while choice != 6:
 6) Salir
 +============================+
 	""")
+
 	choice = int(input("Ingrese la opcion: "))
+
 	if choice < 1 or choice > 6:
 		clear()
 		print("\n[!!] La opcion es invalida.")
@@ -128,16 +184,18 @@ while choice != 6:
 			print("==========CREAR ALQUILER==========\n")
 			Client().newRent()
 		elif choice == 2:
-			print("BUSCAR ALQUILER")
+			print("==========BUSCAR ALQUILER==========\n")
+			Client().findClient()
 		elif choice == 3:
-			print("MODIFICAR ALQUILER")
+			print("==========MODIFICAR ALQUILER==========\n")
 		elif choice == 4:
-			print("ELIMINAR ALQUIER")
+			print("==========ELIMINAR ALQUIER==========\n")
 		elif choice == 5:
 			listProducts()
 		
 	
-clear()		
+clear()
+	
 print("""+==============================+
 | SISTEMA CERRADO EXITOSAMENTE |
 +==============================+""")
