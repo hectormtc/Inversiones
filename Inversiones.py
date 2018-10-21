@@ -23,6 +23,7 @@ clear()
 
 class Client(object):
 	
+	ID = 0
 	STATE = None
 	
 	def __init__(self):
@@ -34,6 +35,7 @@ class Client(object):
 		self.total =      []
 		self.subtotal =   []
 		self.product =    []
+		self.cantidad =   []
 	
 
 	def getName(self):
@@ -90,16 +92,16 @@ class Client(object):
 			elif isinstance(item, str):
 				self.product.append(item)
 		
-		printItems = zip(self.total, self.product)
+		printItems = zip(self.total, self.product, self.cantidad)
 
-		print("PRODUCTO\t| Cantidad")
-		print("===============================")
+		print("PRODUCTO\t| Cantidad\t | Subtotal")
+		print("="*45)
 		
-		for t, p in printItems:
-			print(str(p), "\t ", str(t),"\t ")
+		for t, p, c in printItems:
+			print(str(p), "\t  ", str(c),"\t\t  ", str(t))
 
-		print("\tTOTAL:   ",sum(self.subtotal),"lps.")
-		print("===============================")
+		print("\t\t\t  TOTAL:    ",sum(self.subtotal),"lps.")
+		print("="*45)
 		self.setState(True)
 
 
@@ -114,21 +116,28 @@ class Client(object):
 			if product in prices:
 				self.wallet.append(product)
 				self.wallet.append(cantidad)
+				self.cantidad.append(prices[product])
 				self.subtotal.append(prices[product] * cantidad)
 			else:
 				print("Producto no existe\n")
 				press = input("Agregar producto...(s/n): ")
 			press = input("Adicionar mas producto?(s/n): ")
 		
-		print("\n===============================")		
-		print("\tALQUILER: ")
-		print("===============================")
+		print("\n"+"="*45)		
+		print("\t-=-=-=-=ALQUILER=-=-=-=-")
+		print("="*45)
 		
 		self.func(self.wallet)
-		clientList.append(Client)
+		client = Client()
+		clientList.append(client)
 		input("\nPresionar enter...")
 		clear()
 		self.printInformation()
+		
+	def saveClient(self):
+		Client.ID += 1
+		client = Client()
+		clientList.append(client)
 
 	def printInformation(self):
 		print("\n===============================")
@@ -151,10 +160,14 @@ class Client(object):
 			try:
 				print("Buscando...")
 				print(clientList[:])
-				for client in clientList:
-					print("CLIENTE",client)
-					if client.getName() == name:
-						print("Cliente encontrado")
+				for client in clientList[:]:
+					print("CLIENTE",client.getName())
+					for name in client:
+						if nam == name:
+							print("Cliente encontrado")
+							print(nam)
+						else:
+							print("No encontrado")
 					else:
 						print("Cliente no encontrado.")
 			except:
@@ -206,4 +219,3 @@ clear()
 print("""+==============================+
 | SISTEMA CERRADO EXITOSAMENTE |
 +==============================+""")
-
