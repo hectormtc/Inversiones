@@ -1,5 +1,16 @@
 import os
-from product import prices
+
+try:
+	from product import prices
+except:
+	print("No se encontro producto")
+finally:
+	prices = {
+		'sillaplastica' : 5,
+		'sillametalica' : 6,
+		'mesaredonda8'  : 10,
+		'mesaredonda10' : 20,
+	}
 
 choice = None
 clientList = []
@@ -23,25 +34,41 @@ def listProducts():
 
 def findClient():
 	global clienList
-
+		
 	def find(name=None, apellido=None, phone=None):
+
+		def onList():
+			print("Cliente encontrado")
+			client.printInformation()
+			input("Presionar enter...")
+			clear()
+		def outList():
+			print("Cliente no encontrado")
+			input("Presionar enter...")
+			clear()
+
 		for client in clientList:
 			if name:
 				if name == client.name:
-					print("Cliente encontrado")
+					onList()
 				else:
-					print("Cliente no encontrado")
+					outList()
+			else:
+				pass
 			if apellido:
 				if apellido == client.apellido:
-					print("Cliente encontrado")
-					print(client.apellido)
+					onList()
 				else:
-					print("Cliente no encontrado")
+					outList()
+			else:
+				pass
 			if phone:
 				if phone == client.phone:
-					print("Cliente encontrado")
+					onList()
 				else:
-					print("Cliente no encontrado")
+					outList()
+			else:
+				pass
 	
 	print("BUSCAR AL CLIENTE POR:\n")
 	print(" 1) Nombre\n 2) Apellido\n 3) Telefono")
