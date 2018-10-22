@@ -26,11 +26,11 @@ class Client(object):
 	ID = 0
 	STATE = None
 	
-	def __init__(self):
-		self.name =       None
-		self.apellido =   None
-		self.address =    None
-		self.deposit =    None
+	def __init__(self, name, apellido, address, deposit):
+		self.name =       name
+		self.apellido =   apellido
+		self.address =    address
+		self.deposit =    deposit
 		self.wallet =     []
 		self.total =      []
 		self.subtotal =   []
@@ -128,15 +128,14 @@ class Client(object):
 		print("="*45)
 		
 		self.func(self.wallet)
-		client = Client()
-		clientList.append(client)
+		self.saveClient()
 		input("\nPresionar enter...")
 		clear()
 		self.printInformation()
 		
 	def saveClient(self):
 		Client.ID += 1
-		client = Client()
+		client = Client(self.name, self.apellido, self.address, self.deposit)
 		clientList.append(client)
 
 	def printInformation(self):
@@ -148,34 +147,31 @@ class Client(object):
 		print("Estado:", self.getState())
 
 
-	def findClient(self, name=None, apellido=None, phone=None):
-		global clienList
-		print("BUSCAR AL CLIENTE POR:\n")
-		print(" 1) Nombre\n 2) Apellido\n 3) Telefono")
-		print("\n===============================")
+def findClient():
+	global clienList
+	print("BUSCAR AL CLIENTE POR:\n")
+	print(" 1) Nombre\n 2) Apellido\n 3) Telefono")
+	print("\n===============================")
 
-		select = int(input("Opcion: "))
-		if select == 1:
-			name = str(input("Escriba el nombre del cliente: "))
+	select = int(input("Opcion: "))
+	if select == 1:
+		name = str(input("Escriba el nombre del cliente: "))
+		for client in clientList:
 			try:
-				print("Buscando...")
-				print(clientList[:])
-				for client in clientList[:]:
-					print("CLIENTE",client.getName())
-					for name in client:
-						if nam == name:
-							print("Cliente encontrado")
-							print(nam)
-						else:
-							print("No encontrado")
-					else:
-						print("Cliente no encontrado.")
+				print('LIST', clientList)
+				print('Client', client)
+				print('Client name', client.name)
+				if name == client.name:
+					print("Cliente encontrado")
+					print(name)
+				else:
+					print("No encontrado")
 			except:
 				print("No funciona")
-		elif select == 2:
-			pass
-		elif select == 3:
-			pass
+	elif select == 2:
+		pass
+	elif select == 3:
+		pass
 
 while choice != 6:
 	print("""
@@ -202,10 +198,10 @@ while choice != 6:
 		clear()
 		if choice == 1:
 			print("==========CREAR ALQUILER==========\n")
-			Client().newRent()
+			Client('','','','').newRent()
 		elif choice == 2:
 			print("==========BUSCAR ALQUILER==========\n")
-			Client().findClient()
+			findClient()
 		elif choice == 3:
 			print("==========MODIFICAR ALQUILER==========\n")
 		elif choice == 4:
