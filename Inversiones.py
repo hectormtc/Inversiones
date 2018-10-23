@@ -14,7 +14,7 @@ finally:
 
 choice = None
 clientList = []
-
+clientID = 0
 
 def clear():
 	os.system('clear')
@@ -85,11 +85,15 @@ def findClient(chmod=False):
 	
 	while select != 4:
 		print("\n"+"="*45)
-		print("\tBUSCAR AL CLIENTE POR:\n")
+		if chmod == True:
+		
+			print("\t[ MODIFICAR CLIENTE ]\n")
+		else:
+			print("\t[ BUSCAR CLIENTE ]\n")
 		print(" 1) Nombre\n 2) Apellido\n 3) Telefono\n 4) Volver al menu")
 		print("="*45)
 
-		select = int(input("Opcion: "))
+		select = int(input("Por: "))
 		if select < 1 or select > 4:
 			clear()
 			print("\n"+"="*45)
@@ -112,17 +116,17 @@ class Client(object):
 	
 
 	def __init__(self, name, apellido, address, phone, deposit,
-		     monto, total, subtotal, product, cantidad):
-		self.name =       name
-		self.apellido =   apellido
-		self.address =    address
-		self.phone =      phone
-		self.deposit =    deposit
-		self.monto =      []
-		self.total =      []
-		self.subtotal =   []
-		self.product =    []
-		self.cantidad =   []
+		     monto=[], total=[], subtotal=[], product=[], cantidad=[]):
+		self.name     = name
+		self.apellido = apellido
+		self.address  = address
+		self.phone    = phone
+		self.deposit  = deposit
+		self.monto    = monto
+		self.total    = total
+		self.subtotal = subtotal
+		self.product  = product
+		self.cantidad = cantidad
 	
 
 	def getProduct(self):
@@ -170,8 +174,8 @@ class Client(object):
 
 
 	def newRent(self, chmod=False):
-		self.inputClient()
 		if chmod == True:
+			self.printInformation()
 			self.rentProduct(True)
 		else:
 			self.rentProduct()
@@ -204,7 +208,6 @@ class Client(object):
 			
 			press = input("\n\t[Adicionar mas producto?](s/n): ")
 
-		self.deposit = int(input("\nDeposito: "))
 		if chmod == False:
 			self.saveClient()
 		
@@ -218,14 +221,14 @@ class Client(object):
 
 
 	def saveClient(self):
+		global clientList
 		Client.ID += 1
 		self.setState(True)
-		client = Client(self.name,    self.apellido,
-				self.address, self.phone,
-				self.deposit, self.monto,
-				self.total,   self.subtotal,
-				self.product, self.cantidad)
-		clientList.append(client)
+		clientList.append(Client(self.name,     self.apellido,
+					 self.apellido, self.phone,
+					 self.address,  self.monto,
+					 self.total,    self.subtotal,
+					 self.product,  self.cantidad))
 
 
 	def printInformation(self):
@@ -245,8 +248,8 @@ class Client(object):
 		print("="*45)
 
 		self.printItems = zip(self.getProduct(),
-				 self.getCantidad(),
-				 self.getSubtotal())
+				      self.getCantidad(),
+				      self.getSubtotal())
 
 		print("PRODUCTO\t| Cantidad\t | Subtotal")
 		print("="*45)
@@ -292,7 +295,13 @@ while choice != 6:
 			print("\n"+"="*45)
 			print("\t-=-=-=CREAR ALQUILER=-=-=-")
 			print("="*45)
-			Client('','','','','','','','','','').newRent()
+			nombre   = str(input("Nombre del cliente: "  ))
+			apellido = str(input("Apellido del cliente: "))
+			phone    = int(input("Celular/Telefono: "    ))
+			address  = str(input("Direccion: "           ))
+			deposit  = str(input("Deposito: "            ))
+			client = Client(nombre, apellido, phone, address, deposit)
+			client.newRent()
 		elif choice == 2:
 			print("\n"+"="*45)
 			print("\t-=-=-=BUSCAR ALQUILER=-=-=-")
