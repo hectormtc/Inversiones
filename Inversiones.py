@@ -40,6 +40,11 @@ def findClient(chmod=False):
 
 	def find(name=False, apellido=False, phone=False):
 		check = False
+		def check(state=False):
+			if state == True:
+				check = True
+			else:
+				pass
 
 
 		def onList():
@@ -67,18 +72,16 @@ def findClient(chmod=False):
 		if name == True:
 			nameClient      = str(input("\nNombre del cliente: "))
 			for client in clientList:
-				if (nameClient == client.name):
-					check = True
+				check(True) if (nameClient == client.name) else check(False)
+
 		elif apellido == True:
-			apellidoCliente = str(input("\nApellido del cliente: "))
+			apellidoClient = str(input("\nApellido del cliente: "))
 			for client in clientList:
-				if (apellidoCliente == client.apellido):
-					check = True
+				check(True) if (apellidoClient == client.apellido) else check(False)
 		elif phone == True:
 			phoneClient     = int(input("\nNumero del cliente: "))
 			for client in clientList:
-				if (phoneClient == client.phone):
-					check = True
+				check(True) if (phoneClient == client.phone) else check(False)
 		
 		outList() if check == False else onList()
 
