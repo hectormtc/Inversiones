@@ -35,40 +35,30 @@ def listProducts():
 def findClient():
 	global clienList
 		
-	def find(name=None, apellido=None, phone=None):
-
+	def find(name=False, apellido=False, phone=False):
 		def onList():
-			print("Cliente encontrado")
+			print("\n[Cliente encontrado]")
 			client.printInformation()
 			input("Presionar enter...")
 			clear()
+		
 		def outList():
-			print("Cliente no encontrado")
+			print("\n[Cliente no encontrado]")
 			input("Presionar enter...")
 			clear()
 
 		for client in clientList:
 			if name:
-				if name == client.name:
-					onList()
-				else:
-					outList()
+				name= str(input("Escriba el nombre del cliente: "))
+				onList() if (name == client.name) else outList()
+			elif apellido:
+				apellido = str(input("Escriba el apellido del cliente: "))
+				onList() if (name == client.apellido) else outList()
+			elif phone :
+				phone = int(input("Escriba el numero del cliente: "))
+				onList() if (name == client.phone) else outList()
 			else:
-				pass
-			if apellido:
-				if apellido == client.apellido:
-					onList()
-				else:
-					outList()
-			else:
-				pass
-			if phone:
-				if phone == client.phone:
-					onList()
-				else:
-					outList()
-			else:
-				pass
+				print("Error en buscar")
 	
 	print("BUSCAR AL CLIENTE POR:\n")
 	print(" 1) Nombre\n 2) Apellido\n 3) Telefono")
@@ -76,27 +66,27 @@ def findClient():
 
 	select = int(input("Opcion: "))
 	if select == 1:
-		name= str(input("Escriba el nombre del cliete: "))
-		find(name=name)
+		find(name=True)
 	elif select == 2:
-		apellido = str(input("Escriba el apellido del cliente: "))
-		find(apellido=apellido)
+		find(apellido=True)
 	elif select == 3:
-		phone = int(input("Escriba el numero del cliente: "))
-		find(phone=phone)
+		find(phone=True)
 
 
 class Client(object):
 	
 	ID = 0
-	STATE = None
+	STATE = False
 	
-	def __init__(self, name, apellido, address, deposit, phone):
+	def __init__(self, name, apellido, address, phone, deposit, wallet, total, subtotal, product, cantidad):
 		self.name =       name
 		self.apellido =   apellido
 		self.address =    address
 		self.phone =      phone
 		self.deposit =    deposit
+		self.listNumbers()
+
+	def listNumbers(self):
 		self.wallet =     []
 		self.total =      []
 		self.subtotal =   []
@@ -125,13 +115,13 @@ class Client(object):
 
 
 	def setState(self, state):
-		Client.State = state
+		Client.STATE = state
 
 
 	def getState(self):
-		if Client.State == True:
+		if Client.STATE == True:
 			return str("En alquiler")
-		elif Client.State == False:
+		elif Client.STATE == False:
 			return str("Entregado")
 
 
@@ -173,7 +163,6 @@ class Client(object):
 
 		print("\t\t\t  TOTAL:    ",sum(self.subtotal),"lps.")
 		print("="*45)
-		self.setState(True)
 
 
 	def rentProduct(self):
@@ -191,11 +180,9 @@ class Client(object):
 				self.subtotal.append(prices[product] * cantidad)
 			else:
 				print("Producto no existe\n")
-				press = input("Agregar producto...(s/n): ")
 			press = input("Adicionar mas producto?(s/n): ")
 		
 		self.func(self.wallet)
-		self.printProduct()
 		self.saveClient()
 		input("\nPresionar enter...")
 		clear()
@@ -203,7 +190,10 @@ class Client(object):
 		
 	def saveClient(self):
 		Client.ID += 1
-		client = Client(self.name, self.apellido, self.address, self.deposit, self.phone)
+		self.setState(True)
+		client = Client(self.name,self.apellido,self.address,
+				self.phone,self.deposit, self.wallet,
+				self.total,self.subtotal,self.product,self.cantidad)
 		clientList.append(client)
 
 	def printInformation(self):
@@ -213,7 +203,7 @@ class Client(object):
 		print("Direccion:", self.getAddress())
 		print("Deposito:", self.getDeposit())
 		print("Estado:", self.getState())
-		
+		print(self.printProduct())
 
 
 while choice != 6:
@@ -241,7 +231,7 @@ while choice != 6:
 		clear()
 		if choice == 1:
 			print("==========CREAR ALQUILER==========\n")
-			Client('','','','','').newRent()
+			Client('','','','','','','','','','').newRent()
 		elif choice == 2:
 			print("==========BUSCAR ALQUILER==========\n")
 			findClient()
