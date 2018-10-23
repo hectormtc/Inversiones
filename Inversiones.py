@@ -39,26 +39,33 @@ def findClient():
 		def onList():
 			print("\n[Cliente encontrado]")
 			client.printInformation()
-			input("Presionar enter...")
-			clear()
 		
 		def outList():
 			print("\n[Cliente no encontrado]")
-			input("Presionar enter...")
-			clear()
 
-		for client in clientList:
-			if name:
-				name= str(input("Escriba el nombre del cliente: "))
-				onList() if (name == client.name) else outList()
-			elif apellido:
-				apellido = str(input("Escriba el apellido del cliente: "))
-				onList() if (name == client.apellido) else outList()
-			elif phone :
-				phone = int(input("Escriba el numero del cliente: "))
-				onList() if (name == client.phone) else outList()
-			else:
-				print("Error en buscar")
+		if name:
+			name= str(input("Escriba el nombre del cliente: "))
+			for client in clientList:
+				if (name == client.name):
+					onList()
+				else:
+					pass
+		if apellido:
+			apellido = str(input("Escriba el apellido del cliente: "))
+			for client in clientList:
+				if (apellido == client.apellido):
+					onList()
+				else:
+					pass
+		if phone:
+			phone = int(input("Escriba el numero del cliente: "))
+			for client in clientList:
+				if (phone == client.phone):
+					onList()
+				else:
+					pass
+		else:
+			input("Presionar enter...")
 	
 	print("BUSCAR AL CLIENTE POR:\n")
 	print(" 1) Nombre\n 2) Apellido\n 3) Telefono")
@@ -92,31 +99,39 @@ class Client(object):
 		self.subtotal =   []
 		self.product =    []
 		self.cantidad =   []
+
+	def getWallet(self):
+		return self.wallet
+
+	def getTotal(self):
+		return self.total
+
+	def getSubtotal(self):
+		return sum(self.subtotal)
+
+	def getProduct(self):
+		return self.product
 	
+	def getCantidad(self):
+		return self.cantidad
 
 	def getName(self):
 		return self.name
 
-
 	def getApellido(self):
 		return self.apellido
-
 
 	def getPhone(self):
 		return self.phone
 
-
 	def getAddress(self):
 		return self.address
-	
 
 	def getDeposit(self):
 		return self.deposit
 
-
 	def setState(self, state):
 		Client.STATE = state
-
 
 	def getState(self):
 		if Client.STATE == True:
@@ -134,11 +149,9 @@ class Client(object):
 
 
 	def newRent(self):
+		self.listNumbers()
 		self.inputClient()
 		self.rentProduct()
-		print("===============================")
-		print("\tALQUILER AGREGADO")
-		print("===============================")
 
 
 	def func(self, wallet):
@@ -153,15 +166,15 @@ class Client(object):
 		print("\t-=-=-=-=ALQUILER=-=-=-=-")
 		print("="*45)
 
-		printItems = zip(self.total, self.product, self.cantidad)
+		printItems = zip(self.getTotal(), self.getProduct(), self.getCantidad())
 
 		print("PRODUCTO\t| Cantidad\t | Subtotal")
 		print("="*45)
 		
 		for t, p, c in printItems:
-			print(str(p), "\t  ", str(c),"\t\t  ", str(t))
+			print(p, "\t  ", c,"\t\t  ", t)
 
-		print("\t\t\t  TOTAL:    ",sum(self.subtotal),"lps.")
+		print("\t\t\t  TOTAL:    ",self.getSubtotal(),"lps.")
 		print("="*45)
 
 
@@ -187,6 +200,9 @@ class Client(object):
 		input("\nPresionar enter...")
 		clear()
 		self.printInformation()
+		print("\n"+"="*45)
+		print("\tALQUILER AGREGADO")
+		print("="*45)
 		
 	def saveClient(self):
 		Client.ID += 1
