@@ -40,6 +40,8 @@ def findClient(chmod=False):
 
 	def find(name=False, apellido=False, phone=False):
 		check = False
+
+
 		def check(state=False):
 			if state == True:
 				check = True
@@ -60,7 +62,7 @@ def findClient(chmod=False):
 				client.printInformation()
 				input("Presionar enter...")
 				clear()
-		
+
 
 		def outList():
 			print("\n"+"="*45)
@@ -126,10 +128,15 @@ class Client(object):
 		self.phone    = phone
 		self.deposit  = deposit
 		self.monto    = monto
-		self.total    = total
+		self.total    = total	
 		self.subtotal = subtotal
 		self.product  = product
 		self.cantidad = cantidad
+		self.monto    = []
+		self.total    = []
+		self.subtotal = []
+		self.product  = []
+		self.cantidad = []
 	
 
 	def getProduct(self):
@@ -192,8 +199,8 @@ class Client(object):
 
 
 	def rentProduct(self, chmod=False):
-		press = None
 		global clientList
+		press = None
 		listProducts()
 		print("\n\t-=-=-=[ AGREGAR ALQUILER ]=-=-=-")
 		
@@ -214,7 +221,6 @@ class Client(object):
 		if chmod == False:
 			self.saveClient()
 		
-		input("\n\tPresionar enter...")
 		clear()
 		self.printInformation()
 
@@ -227,11 +233,10 @@ class Client(object):
 		global clientList
 		Client.ID += 1
 		self.setState(True)
-		clientList.append(Client(self.name,     self.apellido,
-					 self.apellido, self.phone,
-					 self.address,  self.monto,
-					 self.total,    self.subtotal,
-					 self.product,  self.cantidad))
+		#client = Client(self.name,     self.apellido,
+		#		self.phone,    self.address,
+		#		self.deposit)
+		#clientList.append(client)
 
 
 	def printInformation(self):
@@ -272,6 +277,7 @@ class Client(object):
 
 ######################################################################
 while choice != 6:
+
 	print("\t" + """
 	+============================+
 	| INVERSIONES BONILLA TORRES |
@@ -292,8 +298,10 @@ while choice != 6:
 	if choice < 1 or choice > 6:
 		clear()
 		print("\n\t[!!] La opcion es invalida.")
+	
 	elif choice <= 5:
 		clear()
+		
 		if choice == 1:
 			print("\n"+"="*45)
 			print("\t-=-=-=CREAR ALQUILER=-=-=-")
@@ -303,29 +311,35 @@ while choice != 6:
 			phone    = int(input("Celular/Telefono: "    ))
 			address  = str(input("Direccion: "           ))
 			deposit  = str(input("Deposito: "            ))
-			client = Client(nombre, apellido, phone, address, deposit)
-			client.newRent()
+			newClient = Client(nombre, apellido, phone, address, deposit)
+			newClient.newRent()
+			clientList.append(newClient)
+			newClient = None
+		
 		elif choice == 2:
 			print("\n"+"="*45)
 			print("\t-=-=-=BUSCAR ALQUILER=-=-=-")
 			print("="*45)
 			findClient()
+		
 		elif choice == 3:
 			print("\n"+"="*45)
 			print("\t-=-=-=MODIFICAR ALQUILER=-=-")
 			print("="*45)
 			findClient(True)
+		
 		elif choice == 4:
 			print("\n"+"="*45)
 			print("\t-=-=-=ELIMINAR ALQUIER=-=-=-")
 			print("="*45)
+		
 		else:
 			listProducts()
-		
-	
-clear()
+
+
 
 ######################################################################
+clear()
 print("""\n\t+==============================+
 \t| SISTEMA CERRADO EXITOSAMENTE |
 \t+==============================+\n""")
