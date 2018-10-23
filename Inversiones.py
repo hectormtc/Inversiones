@@ -52,6 +52,7 @@ def findClient(chmod=False):
 		def onList():
 			print("\n"+"="*45)
 			print("\n-=-=-=[ CLIENTE ENCONTRADO ]=-=-=-")
+			print("[CLIENTES1]", client.name, client)
 			
 			if(chmod):
 				print("\n-=-=-=-[ CAMBIAR INFORMACION ]=-=-=-")
@@ -74,7 +75,17 @@ def findClient(chmod=False):
 		if name == True:
 			nameClient      = str(input("\nNombre del cliente: "))
 			for client in clientList:
-				check(True) if (nameClient == client.name) else check(False)
+				print("[CLIENTES2]", client.name, client )
+				if nameClient == client.name:
+					if(chmod):
+						print("\n-=-=-=-[ CAMBIAR INFORMACION ]=-=-=-")
+						client.newRent(True)
+						input("Presionar enter...")
+						clear()
+					else:
+						client.printInformation()
+						input("Presionar enter...")
+						clear()
 
 		elif apellido == True:
 			apellidoClient = str(input("\nApellido del cliente: "))
@@ -85,7 +96,7 @@ def findClient(chmod=False):
 			for client in clientList:
 				check(True) if (phoneClient == client.phone) else check(False)
 		
-		outList() if check == False else onList()
+		#outList() if check == False else onList()
 
 	
 	while select != 4:
