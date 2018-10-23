@@ -10,128 +10,252 @@ finally:
 		'sillametalica' : 6,
 		'mesaredonda8'  : 10,
 		'mesaredonda10' : 20,
-	}
+		 }
 
 choice = None
 clientList = []
+
 
 def clear():
 	os.system('clear')
 
 clear()
 
-
+######################################################################
 def listProducts():
-	print("\t"+"="*32)
+	print("\n\t"+"="*32)
 	print("""\tPRODUCTO\t| PRECIO""")
 	print("\t"+"="*32)
 
 	for product, price in prices.items():
-		print("\t"+str(product)+"\t| "+str(price)+" lps.")
+		print("\t" + str(product) + "\t| " + str(price) + " lps.")
+
 	print("\t"+"="*32)
-	input("Presionar enter...")
+	input("\tPresionar enter...")
 
-
-def findClient():
+######################################################################
+def findClient(chmod=False):
 	global clienList
-		
+	select = None
+
 	def find(name=False, apellido=False, phone=False):
+		check = False
+
+
 		def onList():
-			print("\n[Cliente encontrado]")
-			client.printInformation()
+			print("\n"+"="*45)
+			print("\n-=-=-=[ CLIENTE ENCONTRADO ]=-=-=-")
+			
+			if(chmod):
+				print("\n-=-=-=-[ CAMBIAR INFORMACION ]=-=-=-")
+				client.newRent(True)
+				input("Presionar enter...")
+				clear()
+			else:
+				client.printInformation()
+				input("Presionar enter...")
+				clear()
 		
+
 		def outList():
-			print("\n[Cliente no encontrado]")
-
-		if name:
-			name= str(input("Escriba el nombre del cliente: "))
-			for client in clientList:
-				if (name == client.name):
-					onList()
-				else:
-					pass
-		if apellido:
-			apellido = str(input("Escriba el apellido del cliente: "))
-			for client in clientList:
-				if (apellido == client.apellido):
-					onList()
-				else:
-					pass
-		if phone:
-			phone = int(input("Escriba el numero del cliente: "))
-			for client in clientList:
-				if (phone == client.phone):
-					onList()
-				else:
-					pass
-		else:
+			print("\n"+"="*45)
+			print("\n-=-=-=[ CLIENTE NO ENCOTRADO ]=-=-=-")
 			input("Presionar enter...")
+			clear()
+
+
+		if name == True:
+			nameClient      = str(input("\nNombre del cliente: "))
+			for client in clientList:
+				if (nameClient == client.name):
+					check = True
+		elif apellido == True:
+			apellidoCliente = str(input("\nApellido del cliente: "))
+			for client in clientList:
+				if (apellidoCliente == client.apellido):
+					check = True
+		elif phone == True:
+			phoneClient     = int(input("\nNumero del cliente: "))
+			for client in clientList:
+				if (phoneClient == client.phone):
+					check = True
+		
+		outList() if check == False else onList()
+
 	
-	print("BUSCAR AL CLIENTE POR:\n")
-	print(" 1) Nombre\n 2) Apellido\n 3) Telefono")
-	print("\n===============================")
+	while select != 4:
+		print("\n"+"="*45)
+		print("\tBUSCAR AL CLIENTE POR:\n")
+		print(" 1) Nombre\n 2) Apellido\n 3) Telefono\n 4) Volver al menu")
+		print("="*45)
 
-	select = int(input("Opcion: "))
-	if select == 1:
-		find(name=True)
-	elif select == 2:
-		find(apellido=True)
-	elif select == 3:
-		find(phone=True)
+		select = int(input("Opcion: "))
+		if select < 1 or select > 4:
+			clear()
+			print("\n"+"="*45)
+			print("\n[!!] La opcion es invalida.")
+			print("="*45)
+		elif select <= 3:
+			if select == 1:
+				find(name=True)
+			elif select == 2:
+				find(apellido=True)
+			else:
+				find(phone=True)
 
 
+######################################################################
 class Client(object):
 	
 	ID = 0
 	STATE = False
 	
-	def __init__(self, name, apellido, address, phone, deposit, wallet, total, subtotal, product, cantidad):
+
+	def __init__(self, name, apellido, address, phone, deposit,
+		     monto, total, subtotal, product, cantidad):
 		self.name =       name
 		self.apellido =   apellido
 		self.address =    address
 		self.phone =      phone
 		self.deposit =    deposit
-		self.listNumbers()
-
-	def listNumbers(self):
-		self.wallet =     []
+		self.monto =      []
 		self.total =      []
 		self.subtotal =   []
 		self.product =    []
 		self.cantidad =   []
-
-	def getWallet(self):
-		return self.wallet
-
-	def getTotal(self):
-		return self.total
-
-	def getSubtotal(self):
-		return sum(self.subtotal)
+	
 
 	def getProduct(self):
 		return self.product
-	
+
+
+	def getMonto(self):
+		return self.monto
+
+
 	def getCantidad(self):
 		return self.cantidad
+
+
+	def getSubtotal(self):
+		return self.subtotal
+
 
 	def getName(self):
 		return self.name
 
+
+	def getTotal(self):
+		return sum(self.subtotal)
+
+
 	def getApellido(self):
 		return self.apellido
+
 
 	def getPhone(self):
 		return self.phone
 
+
 	def getAddress(self):
 		return self.address
+
 
 	def getDeposit(self):
 		return self.deposit
 
+
 	def setState(self, state):
 		Client.STATE = state
+
+
+	def newRent(self, chmod=False):
+		self.inputClient()
+		if chmod == True:
+			self.rentProduct(True)
+		else:
+			self.rentProduct()
+
+
+	def inputClient(self):
+		self.name     = str(input("Nombre del cliente: "  ))
+		self.apellido = str(input("Apellido del cliente: "))
+		self.phone    = int(input("Celular/Telefono: "    ))
+		self.address  = str(input("Direccion: "           ))
+
+
+	def rentProduct(self, chmod=False):
+		press = None
+		global clientList
+		listProducts()
+		print("\n\t-=-=-=[ AGREGAR ALQUILER ]=-=-=-")
+		
+		while press != 'n':
+			self.producto = str(input("\n\tPRODUCTO: "))
+			self.amount = int(input("\tCANTIDAD: "  ))
+
+			if self.producto in prices:
+				self.product.append(self.producto)
+				self.monto.append(prices[self.producto])
+				self.cantidad.append(self.amount)
+				self.subtotal.append(prices[self.producto] * self.amount)
+			else:
+				print("\t[!!] Producto no existe.\n")
+			
+			press = input("\n\t[Adicionar mas producto?](s/n): ")
+
+		self.deposit = int(input("\nDeposito: "))
+		if chmod == False:
+			self.saveClient()
+		
+		input("\n\tPresionar enter...")
+		clear()
+		self.printInformation()
+
+		print("\n"+"="*45)
+		print("\t-=-=-=[ ALQUILER AGREGADO ]=-=-=-")
+		print("="*45)
+
+
+	def saveClient(self):
+		Client.ID += 1
+		self.setState(True)
+		client = Client(self.name,    self.apellido,
+				self.address, self.phone,
+				self.deposit, self.monto,
+				self.total,   self.subtotal,
+				self.product, self.cantidad)
+		clientList.append(client)
+
+
+	def printInformation(self):
+		print("="*45)
+		print("Nombre:",           self.getName(), self.getApellido())
+		print("Telefono/Celular:", self.getPhone())
+		print("Direccion:",        self.getAddress())
+		print("Deposito:",         self.getDeposit())
+		print("Estado:",           self.getState())
+		print("ID:",               Client.ID)
+		self.printProduct()
+
+
+	def printProduct(self):
+		print("\n"+"="*45)		
+		print("\t-=-=-=-=ALQUILER=-=-=-=-")
+		print("="*45)
+
+		self.printItems = zip(self.getProduct(),
+				 self.getCantidad(),
+				 self.getSubtotal())
+
+		print("PRODUCTO\t| Cantidad\t | Subtotal")
+		print("="*45)
+		
+		for p, c, s in self.printItems:
+			print(p, "\t  ", c,"\t\t  ", s)
+
+		print("\t\t\t  TOTAL:    ",self.getTotal(),"lps.")
+	
 
 	def getState(self):
 		if Client.STATE == True:
@@ -140,127 +264,56 @@ class Client(object):
 			return str("Entregado")
 
 
-	def inputClient(self):
-		self.name = str(input("Nombre del cliente: "))
-		self.apellido = str(input("Apellido del cliente: "))
-		self.phone = int(input("Celular/Telefono: "))
-		self.address = str(input("Direccion: "))
-		self.deposit = int(input("Deposito: "))
-
-
-	def newRent(self):
-		self.listNumbers()
-		self.inputClient()
-		self.rentProduct()
-
-
-	def func(self, wallet):
-		for item in wallet:
-			if isinstance(item, int):
-				self.total.append(item)
-			elif isinstance(item, str):
-				self.product.append(item)
-
-	def printProduct(self):
-		print("\n"+"="*45)		
-		print("\t-=-=-=-=ALQUILER=-=-=-=-")
-		print("="*45)
-
-		printItems = zip(self.getTotal(), self.getProduct(), self.getCantidad())
-
-		print("PRODUCTO\t| Cantidad\t | Subtotal")
-		print("="*45)
-		
-		for t, p, c in printItems:
-			print(p, "\t  ", c,"\t\t  ", t)
-
-		print("\t\t\t  TOTAL:    ",self.getSubtotal(),"lps.")
-		print("="*45)
-
-
-	def rentProduct(self):
-		listProducts()
-		press = None
-		global clientList
-		
-		while press != 'n':
-			product = str(input("\nPRODUCTO: "))
-			cantidad = int(input("CANTIDAD: "))
-			if product in prices:
-				self.wallet.append(product)
-				self.wallet.append(cantidad)
-				self.cantidad.append(prices[product])
-				self.subtotal.append(prices[product] * cantidad)
-			else:
-				print("Producto no existe\n")
-			press = input("Adicionar mas producto?(s/n): ")
-		
-		self.func(self.wallet)
-		self.saveClient()
-		input("\nPresionar enter...")
-		clear()
-		self.printInformation()
-		print("\n"+"="*45)
-		print("\tALQUILER AGREGADO")
-		print("="*45)
-		
-	def saveClient(self):
-		Client.ID += 1
-		self.setState(True)
-		client = Client(self.name,self.apellido,self.address,
-				self.phone,self.deposit, self.wallet,
-				self.total,self.subtotal,self.product,self.cantidad)
-		clientList.append(client)
-
-	def printInformation(self):
-		print("\n===============================")
-		print("Nombre:", self.getName(), self.getApellido())
-		print("Telefono/Celular:", self.getPhone())
-		print("Direccion:", self.getAddress())
-		print("Deposito:", self.getDeposit())
-		print("Estado:", self.getState())
-		print(self.printProduct())
-
-
+######################################################################
 while choice != 6:
-	print("""
-+============================+
-| INVERSIONES BONILLA TORRES |
-+============================+
-\tOpciones
-+============================+
-1) Crear alquiler
-2) Buscar alquiler
-3) Modificar alquiler
-4) Eliminar alquiler
-5) Mostrar precios
-6) Salir
-+============================+
+	print("\t" + """
+	+============================+
+	| INVERSIONES BONILLA TORRES |
+	+============================+
+	\tOpciones
+	+============================+
+	1) Crear alquiler
+	2) Buscar alquiler
+	3) Modificar alquiler
+	4) Eliminar alquiler
+	5) Mostrar precios
+	6) Salir
+	+============================+
 	""")
 
-	choice = int(input("Ingrese la opcion: "))
+	choice = int(input("\tIngrese la opcion: "))
 
 	if choice < 1 or choice > 6:
 		clear()
-		print("\n[!!] La opcion es invalida.")
+		print("\n\t[!!] La opcion es invalida.")
 	elif choice <= 5:
 		clear()
 		if choice == 1:
-			print("==========CREAR ALQUILER==========\n")
+			print("\n"+"="*45)
+			print("\t-=-=-=CREAR ALQUILER=-=-=-")
+			print("="*45)
 			Client('','','','','','','','','','').newRent()
 		elif choice == 2:
-			print("==========BUSCAR ALQUILER==========\n")
+			print("\n"+"="*45)
+			print("\t-=-=-=BUSCAR ALQUILER=-=-=-")
+			print("="*45)
 			findClient()
 		elif choice == 3:
-			print("==========MODIFICAR ALQUILER==========\n")
+			print("\n"+"="*45)
+			print("\t-=-=-=MODIFICAR ALQUILER=-=-")
+			print("="*45)
+			findClient(True)
 		elif choice == 4:
-			print("==========ELIMINAR ALQUIER==========\n")
-		elif choice == 5:
+			print("\n"+"="*45)
+			print("\t-=-=-=ELIMINAR ALQUIER=-=-=-")
+			print("="*45)
+		else:
 			listProducts()
 		
 	
 clear()
-	
-print("""+==============================+
-| SISTEMA CERRADO EXITOSAMENTE |
-+==============================+""")
+
+######################################################################
+print("""\n\t+==============================+
+\t| SISTEMA CERRADO EXITOSAMENTE |
+\t+==============================+\n""")
