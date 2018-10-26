@@ -11,16 +11,16 @@ finally:
 		'sillametalica' : 6,
 		'mesaredonda8'  : 10,
 		'mesaredonda10' : 20,
-		 }
+	}
 
 #LISTS
 clientList      = []
-clientID        = 0
 clientDelivered = []
 clientReceived  = []
 
 #VARIABLES
 global check
+clientID        = 0
 
 
 def clear():
@@ -39,11 +39,19 @@ def listProducts():
 		print("\t" + str(product) + "\t| " + str(price) + " lps.")
 
 	print("\t"+"="*32)
-	input("\tPresionar enter...")
+	input("\t\nPresionar enter...")
+
+
+def showDelivered():
+	for client in clientList:
+		if client.STATE == True:
+			print("[Cliente]",client.name, client.apellido)
+	input("\t\nPresionar enter...")
+	
 
 ######################################################################
 
-def findClient(chmod=False, recv=False):
+def findClient(chmod=False, recv=False, delete=False):
 	global clienList
 	check = False
 	select = None
@@ -59,6 +67,9 @@ def findClient(chmod=False, recv=False):
 			print("\n-=-=-=[ CLIENTE NO ENCOTRADO ]=-=-=-\n")
 			input("\nPresionar enter...")
 			clear()
+	
+	def deleteClient(client):
+		clientList.remove(client)
 
 	def find(name=False, apellido=False, phone=False):
 
@@ -95,7 +106,14 @@ def findClient(chmod=False, recv=False):
 				print("\n"+"="*45)
 				print("\t-=-=-=[ ALQUILER RECIBIDO ]=-=-=-")
 				print("="*45)
+			
+			elif delete == True:
+				print("\n-=-=-=[ ELIMINAR ALQUILER ]=-=-=-")
+				client.printInformation()
+				choice = str(input("\t\nEliminar alquiler?(s/n): "))
 				
+				if choice == "s":
+					deleteClient(client)
 			
 			else:
 				client.printInformation()
@@ -133,6 +151,10 @@ def findClient(chmod=False, recv=False):
 
 		if chmod == True:
 			print("\t[ MODIFICAR CLIENTE ]\n")
+		elif recv == True:
+			print("\t[ RECIBIR CLIENTE ]\n")
+		elif delete == True:
+			print("\t[ ELIMINAR CLIENTE ]\n")
 		else:
 			print("\t[ BUSCAR CLIENTE ]\n")
 
@@ -177,7 +199,7 @@ class Client(object):
 		self.subtotal = []
 		self.product  = []
 		self.cantidad = []
-		self._STATE = False
+		self.STATE = False
 	
 
 	def getProduct(self):
@@ -221,15 +243,15 @@ class Client(object):
 
 
 	def setState(self, state):
-		self._STATE = state
+		self.STATE = state
 
 	def getID(self):
 		return self.ID
 
 	def getState(self):
-		if self._STATE == True:
+		if self.STATE == True:
 			return str("En alquiler")
-		elif self._STATE == False:
+		elif self.STATE == False:
 			return str("Entregado")
 
 
@@ -248,10 +270,10 @@ class Client(object):
 		self.address  = str(input("Direccion: "           ))
 
 
-	def rentProduct(self, chmod=False):
+	def rentProduct(self, chmod=False, quote=False):
 		listProducts()
 
-		if chmod == True:
+		if chmod == True or quote == True:
 			self.monto    = []
 			self.total    = []
 			self.subtotal = []
@@ -278,22 +300,24 @@ class Client(object):
 			press = input("\n\t[Adicionar mas producto?](s/n): ")
 		
 		clear()
-		self.printInformation()
+		if quote == True:
+			self.printInformation(quote=True)
 
 		print("\n"+"="*45)
 		print("\t-=-=-=[ ALQUILER AGREGADO ]=-=-=-")
 		print("="*45)
 
 
-	def printInformation(self):
-		print("="*45)
-		print("Nombre:           ", self.getName(),
-					    self.getApellido())
-		print("Telefono/Celular: ", self.getPhone()   )
-		print("Direccion:        ", self.getAddress() )
-		print("Deposito:         ", self.getDeposit() )
-		print("Estado:           ", self.getState()   )
-		print("ID:               ", self.getID()      )
+	def printInformation(self, quote=False):
+		if quote == False:
+			print("="*45)
+			print("Nombre:           ", self.getName(),
+						    self.getApellido())
+			print("Telefono/Celular: ", self.getPhone()   )
+			print("Direccion:        ", self.getAddress() )
+			print("Deposito:         ", self.getDeposit() )
+			print("Estado:           ", self.getState()   )
+			print("ID:               ", self.getID()      )
 		self.printProduct()
 
 
@@ -313,12 +337,13 @@ class Client(object):
 			print(p, "\t  ", c,"\t\t  ", s)
 
 		print("\t\t\t  TOTAL:    ",self.getTotal(),"lps.")
+		input("\t\nPresionar enter...")
 
 
 ######################################################################
 
 choice = None
-while choice != 10:
+while choice != 9:
 
 	print("\t" + """
 	+============================+
@@ -333,15 +358,14 @@ while choice != 10:
 	5)  Eliminar  Alquiler
 	6)  Mostrar   Precios
 	7)  Mostrar   Pendientes
-	8)  Mostrar   Entregados
-	9)  Crear     Cotizacion
-	10) Salir
+	8)  Crear     Cotizacion
+	9)  Salir
 	+============================+
 	""")
 
 	choice = int(input("\tIngrese la opcion: "))
 
-	if choice < 1 or choice > 11:
+	if choice < 1 or choice > 9:
 		clear()
 		print("\n\t[!!] La opcion es invalida.")
 	
@@ -352,11 +376,11 @@ while choice != 10:
 			print("\n"+"="*45)
 			print("\t-=-=-=CREAR ALQUILER=-=-=-")
 			print("="*45)
-			nombre   = str(input("Nombre del cliente: "  ))
+			nombre   = str(input("Nombre del cliente  : "))
 			apellido = str(input("Apellido del cliente: "))
-			phone    = int(input("Celular/Telefono: "    ))
-			address  = str(input("Direccion: "           ))
-			deposit  = str(input("Deposito: "            ))
+			phone    = int(input("Celular/Telefono    : "))
+			address  = str(input("Direccion           : "))
+			deposit  = str(input("Deposito            : "))
 			newClient = Client(nombre, apellido, phone, address, deposit, clientID)
 			clientID += 1
 			newClient.newRent()
@@ -385,26 +409,24 @@ while choice != 10:
 			print("\n"+"="*45)
 			print("\t-=-=-=ELIMINAR ALQUILER=-=-")
 			print("="*45)
+			findClient(delete=True)
 
 		elif choice == 6:
 			listProducts()
 		
 		elif choice == 7:
+			clear()
 			print("\n"+"="*45)
 			print("\t-=-=-=ALQUILERES PENDIENTES=-=-")
 			print("="*45)
+			showDelivered()
 
 		elif choice == 8:
 			print("\n"+"="*45)
-			print("\t-=-=-=ALQUILERES ENTREGADOS=-=-")
-			print("="*45)
-
-		elif choice == 9:
-			print("\n"+"="*45)
 			print("\t-=-=-=CREAR COTIZACION=-=-")
 			print("="*45)
-		else:
-			pass
+			quote = Client('', '','', '', '', '')
+			quote.rentProduct(quote=True)
 
 ######################################################################
 
