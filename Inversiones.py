@@ -1,4 +1,5 @@
 import os
+import datetime
 
 try:
 	from product import prices
@@ -12,8 +13,13 @@ finally:
 		'mesaredonda10' : 20,
 		 }
 
+#LISTS
+clientList      = []
+clientID        = 0
+clientDelivered = []
+clientReceived  = []
 
-clientList = []
+#VARIABLES
 global check
 
 
@@ -66,16 +72,30 @@ def findClient(chmod=False, recv=False):
 			
 			if(chmod):
 				print("\n-=-=-=[ CAMBIAR INFORMACION ]=-=-=-")
-				client.newRent(True)
-				input("Presionar enter...")
+				client.printInformation()
+				change = str(input("\t\nModificar alquiler?(s/n): "))
+
+				if change == "s":
+					client.newRent(True)
+
 				clear()
+				print("\n"+"="*45)
+				print("\t-=-=-=[ ALQUILER MODIFICADO ]=-=-=-")
+				print("="*45)
+
 			elif recv == True:
 				print("\n-=-=-=[ RECIBIR ALQUILER ]=-=-=-")
 				client.printInformation()
 				choice = str(input("\t\nRecibir alquiler?(s/n): "))
+				
 				if choice == "s":
 					client.setState(False)
-					client.printInformation()
+
+				clear()
+				print("\n"+"="*45)
+				print("\t-=-=-=[ ALQUILER RECIBIDO ]=-=-=-")
+				print("="*45)
+				
 			
 			else:
 				client.printInformation()
@@ -88,10 +108,8 @@ def findClient(chmod=False, recv=False):
 			nameClient = str(input("\nNombre del cliente: "))
 			
 			for client in clientList:
-				print("[LISTA CLIENTES]", client.name, client )
 				if nameClient == client.name:
 					onList(client)
-					break
 				else:
 					nothing()
 
@@ -112,11 +130,12 @@ def findClient(chmod=False, recv=False):
 	
 	while select != 4:
 		print("\n"+"="*45)
+
 		if chmod == True:
-		
 			print("\t[ MODIFICAR CLIENTE ]\n")
 		else:
 			print("\t[ BUSCAR CLIENTE ]\n")
+
 		print(" 1) Nombre\n 2) Apellido\n 3) Telefono\n 4) Volver al menu")
 		print("="*45)
 
@@ -133,15 +152,14 @@ def findClient(chmod=False, recv=False):
 				find(apellido=True)
 			else:
 				find(phone=True)
+		else:
+			clear()
 
 
 ######################################################################
 
 class Client(object):
-	
-	STATE = False
-
-	def __init__(self, name, apellido, address, phone, deposit,
+	def __init__(self, name, apellido, address, phone, deposit, ID,
 		     monto=[], total=[], subtotal=[], product=[], cantidad=[]):
 		self.name     = name
 		self.apellido = apellido
@@ -153,12 +171,13 @@ class Client(object):
 		self.subtotal = subtotal
 		self.product  = product
 		self.cantidad = cantidad
+		self.ID       = ID
 		self.monto    = []
 		self.total    = []
 		self.subtotal = []
 		self.product  = []
 		self.cantidad = []
-		self.__ID      = 0
+		self._STATE = False
 	
 
 	def getProduct(self):
@@ -202,13 +221,16 @@ class Client(object):
 
 
 	def setState(self, state):
-		Client.STATE = state
-
-	def setIncrementID(self, counter):
-		self._ID += counter
+		self._STATE = state
 
 	def getID(self):
-		return self._ID
+		return self.ID
+
+	def getState(self):
+		if self._STATE == True:
+			return str("En alquiler")
+		elif self._STATE == False:
+			return str("Entregado")
 
 
 	def newRent(self, chmod=False):
@@ -235,6 +257,8 @@ class Client(object):
 			self.subtotal = []
 			self.product  = []
 			self.cantidad = []
+		else:
+			self.setState(True)
 			
 		print("\n\t-=-=-=[ AGREGAR ALQUILER ]=-=-=-")
 		
@@ -259,9 +283,6 @@ class Client(object):
 		print("\n"+"="*45)
 		print("\t-=-=-=[ ALQUILER AGREGADO ]=-=-=-")
 		print("="*45)
-
-		self.setIncrementID(1)
-		self.setState(True)
 
 
 	def printInformation(self):
@@ -292,19 +313,11 @@ class Client(object):
 			print(p, "\t  ", c,"\t\t  ", s)
 
 		print("\t\t\t  TOTAL:    ",self.getTotal(),"lps.")
-	
-
-	def getState(self):
-		if Client.STATE == True:
-			return str("En alquiler")
-		elif Client.STATE == False:
-			return str("Entregado")
 
 
 ######################################################################
 
 choice = None
-clientList = []
 while choice != 10:
 
 	print("\t" + """
@@ -344,7 +357,8 @@ while choice != 10:
 			phone    = int(input("Celular/Telefono: "    ))
 			address  = str(input("Direccion: "           ))
 			deposit  = str(input("Deposito: "            ))
-			newClient = Client(nombre, apellido, phone, address, deposit)
+			newClient = Client(nombre, apellido, phone, address, deposit, clientID)
+			clientID += 1
 			newClient.newRent()
 			clientList.append(newClient)
 			newClient = None
