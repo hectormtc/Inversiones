@@ -1,0 +1,6 @@
+silla,20.0
+sillametalica,20.0
+plastica,2.0
+silla,200.0
+met,2.0
+product,20.0
