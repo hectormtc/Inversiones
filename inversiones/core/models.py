@@ -1,14 +1,15 @@
 from django.db import models
+from datetime import date
 
 class Client(models.Model):
-	fname   = models.CharField(max_length=50)
-	lnmae   = models.CharField(max_length=50)
-	address = models.TextField()
-	phone   = models.PositiveIntegerField()
-	deposit = models.PositiveIntegerField()
-	created_at = models.DateTimeField(auto_now_add=True)
-	date       = models.DateTimeField(default=datetime.now, blank=True)
-	order      = models.TextField()
+	nombre    = models.CharField(max_length=50)
+	apellido  = models.CharField(max_length=50)
+	direccion = models.TextField()
+	celular   = models.PositiveIntegerField()
+	deposito  = models.PositiveIntegerField()
+	created_at= models.DateTimeField(auto_now_add=True)
+	Orden     = models.TextField()
+	Total_Lps     = models.PositiveIntegerField()
 
 	
 	PAGADO             = 'P'
@@ -19,21 +20,16 @@ class Client(models.Model):
 	LOCAL              = 'L'
 	ENTREGAR           = 'EE'
 	
-	PAY     = (('PAGO', (
-		  (PAGADO, 'Pagado'),
-		  (PENDIENTE,'Pendiente Pago'),)
-	RENT    = (('ESTADO', (
-		  (ENTREGADO, 'Entregado'),
-		  (ALQUILADO, 'En Alquiler'),
-		  (ALQUILER_PENDIENTE,'Alquiler Pendiente'),)
-	DELIVER = ('ENTREGA', (
-		  (LOCAL, 'Local'),
-		  (ENTREGAR,'Entrega exterior'),)
-		 
-	state_pay     = models.CharField(max_length=2, choices=PAY, default=PAGADO)
-	state_rent    = models.CharField(max_length=2, choices=RENT, default=ALQUILADO)
-        state_deliver = models.CharField(max_lenght=2, choices=DELIVER, default=LOCAL)
+	PAY     = ((PAGADO, 'Pagado'),(PENDIENTE,'Pendiente Pago'),)
+	RENT    = ((ENTREGADO, 'Entregado'), (ALQUILADO, 'En Alquiler'), (ALQUILER_PENDIENTE,'Alquiler Pendiente'),)
+	DELIVER = ((LOCAL, 'Local'),(ENTREGAR,'Entrega exterior'),)
+	Estado_de_Pago     = models.CharField(max_length=2, choices=PAY, default=PAGADO)
+	Estado_de_Renta    = models.CharField(max_length=2, choices=RENT, default=ALQUILADO)
+        Tipo_de_Entrega = models.CharField(max_length=2, choices=DELIVER, default=LOCAL)
+
+	if Estado_de_Pago == 'PP' or Estado_de_Pago == 'Pendiente Pago':
+		Pago_pendiente = models.PositiveIntegerField()
 
 	def __str__(self):
-		   return '{} {} - {}'.format(
-			   self.fname, self.lname, state_rent)
+		   return '{} {} ({})'.format(
+			   self.nombre, self.apellido, self.Estado_de_Renta)
