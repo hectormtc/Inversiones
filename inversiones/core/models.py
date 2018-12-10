@@ -8,6 +8,7 @@ class Client(models.Model):
 	deposit = models.PositiveIntegerField()
 	created_at = models.DateTimeField(auto_now_add=True)
 	date       = models.DateTimeField(default=datetime.now, blank=True)
+	order      = models.TextField()
 
 	
 	PAGADO             = 'P'
