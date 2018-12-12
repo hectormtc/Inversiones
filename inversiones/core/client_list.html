@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html>
+    <body>
+        <ul>
+	    {% for client in object_list %}
+                <li> {{ client }} </li>
+            {% empty %}
+                <li>
+                 No existen clientes.
+                </li>
+            {% endfor %}
+        </ul>
+        <p>
+            Usando https?
+            {{ request.is_secure|yesno }}
+        </p>
+    </body>
+</html>
