@@ -3,6 +3,7 @@ from datetime import date
 from django.urls import reverse
 import uuid
 
+
 """
 class Pago(models.Model):
 	pago = models.CharField(max_length=200, help_text="Especifique un tipo de pago")
@@ -40,7 +41,7 @@ class Producto(models.Model):
 	categoria = models.ForeignKey('Categoria', on_delete=models.SET_NULL, null=True)
 
 	def __str__(self):
-		return '{} {}'.format(self.producto, self.detalles)
+		return '{0} {1}'.format(self.producto, self.detalles)
 
 
 class Orden(models.Model):
@@ -103,5 +104,5 @@ class Cliente(models.Model):
 
 
 	def __str__(self):
-		   return '{} {}'.format(
+		   return '{0} {1}'.format(
 			   self.nombre, self.apellido)
