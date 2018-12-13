@@ -25,7 +25,7 @@ class Renta(models.Model):
 	cantidad = models.PositiveIntegerField()
 
 	def getSubtotal(self):
-		pass#return self.cantidad * self.producto.precio
+		return self.cantidad * self.producto.precio
 
 
 	def __str__(self):
