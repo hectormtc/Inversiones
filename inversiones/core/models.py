@@ -3,29 +3,6 @@ from datetime import date
 from django.urls import reverse
 import uuid
 
-
-"""
-class Pago(models.Model):
-	pago = models.CharField(max_length=200, help_text="Especifique un tipo de pago")
-
-	def __str__(self):
-		return self.pago
-
-
-class Estado(models.Model):
-	estado = models.CharField(max_length=200, help_text="Especifique de estado de renta")
-
-	def __str__(self):
-		return self.estado
-
-
-class Entrega(models.Model):
-	entrega = models.CharField(max_length=200, help_text="Especifique el tipo de entrega")
-
-	def __str__(self):
-		return self.entrega
-"""
-
 class Categoria(models.Model):
 	categoria = models.CharField(max_length=50, help_text="Tipo de categoria")
 
@@ -48,7 +25,7 @@ class Renta(models.Model):
 	cantidad = models.PositiveIntegerField()
 
 	def getSubtotal(self):
-		return self.cantidad * self.producto.precio
+		pass#return self.cantidad * self.producto.precio
 
 
 	def __str__(self):
@@ -57,31 +34,41 @@ class Renta(models.Model):
 													self.cantidad,
 													self.getSubtotal())
 
+class Cliente(models.Model):
+	nombre    = models.CharField(max_length=100)
+	apellido  = models.CharField(max_length=100)
+	celular   = models.BigIntegerField()
+
+
+	def get_abosulte_url(self):
+		return reverse('cliente-detalle', args=[str(self.id)])
+
+
+	def __str__(self):
+		   return '{0} {1}'.format(
+			   self.nombre, self.apellido)
 
 class Orden(models.Model):
-	propietario = models.ForeignKey('Cliente', on_delete=models.SET_NULL, null=True)
-	direccion   = models.TextField('Solo en caso de entrega exterior', blank=True)
-	producto = models.ManyToManyField(Producto, help_text="Ingrese el alquiler")
-	deposito  = models.PositiveIntegerField()
 
-	renta = models.ForeignKey('Renta', on_delete=models.SET_NULL, null=True)
-	observacion = models.TextField(help_text="Observacion Adicional", blank=True)
+	pass
 
 	"""def getTotal(self):
 		return sum(self.renta.getSubtotal() * self.renta)
-"""
+
 	def __str__(self):
-		return 'Cliente {0}'.format(
-									self.propietario.nombre)
+		return 'Cliente {0} {1}'.format(
+									self.propietario.nombre, self.propietario.apellido)
 									#self.getTotal())
 
 	def get_absolute_url(self):
 		return reverse('cliente-detalle', args=[str(self.id)])
-
+"""
 
 class Pedido(models.Model):
+	propietario = models.ForeignKey('Cliente', on_delete=models.SET_NULL, null=True)
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text="ID de la orden")
-	orden = models.ForeignKey('Orden', on_delete=models.SET_NULL, null=True)
+	renta = models.ForeignKey('Renta', on_delete=models.SET_NULL, null=True)
+	observacion = models.TextField(help_text="Observacion Adicional", blank=True)
 
 	date_deliver = models.DateField("Fecha de entrega", null=True, blank=True, help_text="Fecha en que se entregara el pedido")
 	date_receive = models.DateField("Fecha de retorno", null=True, blank=True, help_text="Fecha en que se debe recibir el pedido")
@@ -101,8 +88,10 @@ class Pedido(models.Model):
 
 	estado_de_Pago  = models.CharField(max_length=2, choices=PAY, default=PAGADO)
 	pago_pendiente  = models.PositiveIntegerField(blank=True)
+	deposito        = models.PositiveIntegerField(blank=True)
 	estado_de_renta = models.CharField(max_length=2, choices=RENT, default=ALQUILADO)
 	tipo_de_entrega = models.CharField(max_length=2, choices=DELIVER, default=LOCAL)
+	direccion       = models.TextField(help_text='Solo en caso de entrega exterior', blank=True)
 
 
 	class Meta:
@@ -110,19 +99,4 @@ class Pedido(models.Model):
 
 
 	def __str__(self):
-		return '%s (%s)' % (self.orden.propietario.nombre, self.estado_de_renta)
-
-
-class Cliente(models.Model):
-	nombre    = models.CharField(max_length=100)
-	apellido  = models.CharField(max_length=100)
-	celular   = models.PositiveIntegerField()
-
-
-	def get_abosulte_url(self):
-		return reverse('cliente-detalle', args=[str(self.id)])
-
-
-	def __str__(self):
-		   return '{0} {1}'.format(
-			   self.nombre, self.apellido)
+		return '%s' % (self.estado_de_renta)
