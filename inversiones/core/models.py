@@ -11,7 +11,7 @@ class Categoria(models.Model):
 
 
 class Producto(models.Model):
-	producto  = models.CharField(max_length=200, help_text="Nombre del producto")
+	producto    = models.CharField('Producto', max_length=200, help_text="Nombre del producto")
 	detalles  = models.TextField(help_text="Detalles sobre el producto",blank=True)
 	precio    = models.PositiveIntegerField()
 	cantidad  = models.PositiveIntegerField()
@@ -25,11 +25,10 @@ class Renta(models.Model):
 	cantidad = models.PositiveIntegerField()
 
 	def getSubtotal(self):
-		return self.cantidad * self.producto.precio
-
+		return int(self.cantidad * self.producto.precio)
 
 	def __str__(self):
-		return 'Producto: {0}, Cantidad: {1}, Subtotal: {2}'.format(
+		return 'Producto: {0}, Cantidad: {1} Subtotal: {2}'.format(
 													self.producto,
 													self.cantidad,
 													self.getSubtotal())
@@ -47,6 +46,7 @@ class Cliente(models.Model):
 	def __str__(self):
 		   return '{0} {1}'.format(
 			   self.nombre, self.apellido)
+
 
 class Orden(models.Model):
 
@@ -66,8 +66,9 @@ class Orden(models.Model):
 
 class Pedido(models.Model):
 	propietario = models.ForeignKey('Cliente', on_delete=models.SET_NULL, null=True)
-	id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text="ID de la orden")
+	#id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text="ID de la orden")
 	renta = models.ForeignKey('Renta', on_delete=models.SET_NULL, null=True)
+
 	observacion = models.TextField(help_text="Observacion Adicional", blank=True)
 
 	date_deliver = models.DateField("Fecha de entrega", null=True, blank=True, help_text="Fecha en que se entregara el pedido")
