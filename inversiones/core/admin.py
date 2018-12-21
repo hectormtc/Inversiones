@@ -35,16 +35,15 @@ class ProductoAdmin(admin.ModelAdmin):
 class RentaInLine(admin.TabularInline):
 	model = Renta
 
-"""
 @admin.register(Renta)
 class RentaAdmin(admin.ModelAdmin):
+	
 	list_display = ('producto','cantidad')
-	inLines = [RentaInLine]
-"""
+
+
 
 @admin.register(Pedido)
 class PedidoAdmin(admin.ModelAdmin):
-	inLines = [RentaInLine]
 	list_display  = ('cliente',
 			'estado_de_renta',
 			'date_deliver',
@@ -54,11 +53,10 @@ class PedidoAdmin(admin.ModelAdmin):
 			'tipo_de_entrega',
 			'pago_pendiente',
 			'estado_de_pago')
-	
-	
+"""
 	fieldsets = (
 		(None, {
-			'fields':['cliente',
+			'fields':['id','cliente',
 				'renta']
 			}),
 		('Control de fechas',{
@@ -80,6 +78,6 @@ class PedidoAdmin(admin.ModelAdmin):
 				'observacion')
 			}),
 		)
-
+"""
 admin.site.register(Categoria)
 
