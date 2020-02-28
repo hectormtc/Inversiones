@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+<title>{% block title %} Cliente { % endblock % }</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div class="page-header">
+        <h1><a href="/">Inversiones Bonilla Torres</a></h1>
+        <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+    </div>
+    <div class="content container">
+        <div class="row">
+            <div class="col-md-8">
+            {% block content %}
+
+            <<a href="{% url 'client_detail' %}"
+            >
+            Cliente
+          </a>
+
+            {% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
