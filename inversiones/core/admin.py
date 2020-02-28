@@ -8,6 +8,7 @@ class ArticuloInLine(admin.TabularInline):
 
 class ArticuloAdmin(admin.ModelAdmin):
     list_display = ('producto', 'cantidad')
+    list_filter = ('producto', 'cantidad')
     inlines = [ArticuloInLine]
 ###########################################
 @admin.register(Orden)
@@ -20,11 +21,13 @@ class FacturaInstanceInLine(admin.TabularInline):
 ###########################################33#
 @admin.register(Factura)
 class FacturaAdmin(admin.ModelAdmin):
-    list_display  = ('cliente',)
+    list_display  = ('cliente','encargado')
+    fields = [('cliente','encargado')]
     inlines = [FacturaInstanceInLine]
+    search_fields = ('nombre','apellido','empresa', 'phone')
 
 class FacturaInstanceAdmin(admin.ModelAdmin):
-    list_display = ('id', 'orden',
+    list_display = ('orden',
     'estado_de_pago'
     'estado_de_renta',
     'date_deliver',
@@ -34,6 +37,16 @@ class FacturaInstanceAdmin(admin.ModelAdmin):
     'pago_pendiente',
     'estado_de_pago')
     search_fields = ('nombre','apellido','empresa')
+
+    fieldsets = (
+        (
+        'Estados de pago', {
+        'fields': ('estado_de_pago','pago_pendiente','deposito')
+        }
+
+        )
+
+    )
 ################################################33
 
 class ClienteAdmin(admin.ModelAdmin):
