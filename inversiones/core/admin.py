@@ -24,7 +24,7 @@ class FacturaAdmin(admin.ModelAdmin):
     list_display  = ('cliente','encargado')
     fields = [('cliente','encargado')]
     inlines = [FacturaInstanceInLine]
-    search_fields = ('nombre','apellido','empresa', 'phone')
+    search_fields = ('cliente__nombre','cliente__apellido')
 
 class FacturaInstanceAdmin(admin.ModelAdmin):
     list_display = ('orden',
