@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% include 'material/includes/material_css.html' %}
+{% include 'material/includes/material_js.html' %}
+
+{% load material_form %}
+
+<html>
+<body>
+  {% block content %}
+<p>Estas buscado: <strong>{{ query }}</strong></p>
+<div class="cliente">
+{% if cliente %}
+    <p>Clientes encontrados: {{ cliente|length }} Cliente{{ cliente|pluralize }}.</p>
+    <ul>
+        {% for cliente in cliente %}
+        <h2><a href="/client-detail/{{cliente.pk}}"><li>{{ cliente.nombre }} {{cliente.apellido}}</li></a></h2>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Ningún libro coincide con el criterio de búsqueda.</p>
+{% endif %}
+{% endblock %}
+
+</div>
+</body>
+</html>

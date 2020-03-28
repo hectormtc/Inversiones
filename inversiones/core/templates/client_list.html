@@ -1,0 +1,32 @@
+{% load static %}
+<html>
+<head>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+       <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+       <link rel="stylesheet" href="{% static 'css/style.css' %}">
+       <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <div class="page-header">
+          <h1><a href="/">Inversiones Bonilla Torres</a></h1>
+</div>
+<div class="content container">
+    <div class="row">
+        <div class="col-md-8">
+        </div>
+        <h3>Lista de clientes</h3>
+        <div>
+{% for client in client %}
+    <div class ="post">
+        <h4>
+          <a href="{ % url 'core:client_detail' pk=client.id % }">
+            {{ client }}
+        </a>
+      </h4>
+    </div>
+{% endfor %}
+</div>
+    </div>
+</div>
+</body>
+</html>

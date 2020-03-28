@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% include 'material/includes/material_css.html' %}
+{% include 'material/includes/material_js.html' %}
+{% load material_form %}
+
+{% block title %}Busqueda{% endblock title %}
+{% block nav-style %}Busqueda{% endblock nav-style %}
+
+
+<html>
+<body>
+{% block content %}
+{% if errors %}
+<ul>
+       {% for error in errors%}
+       <li style="color: red;">{{ error }}</li>
+       {% endfor %}
+  </ul>
+{% endif %}
+    <form action="/buscar/" method="get">
+      <input type="text" name="q">
+        <input type="submit" value="Buscar">
+    </form>
+{% endblock content %}
+</body>
+</html>

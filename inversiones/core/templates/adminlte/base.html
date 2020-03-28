@@ -1,0 +1,86 @@
+<!doctype html>
+
+<html>
+<head>
+
+<title>{% block title %}Inicio {% endblock title %} | INVERBT</title>
+{% block meta %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+{% endblock %}
+{% block head_meta_viewport %}
+               <meta name="viewport"
+                     content="width=device-width, initial-scale=1.0">
+           {% endblock head_meta_viewport %}
+
+           {% block head_css %}
+                   {% block head_css_site %}
+                       <link href="{{ STATIC_URL }}css/bootstrap.min.css"
+                             rel="stylesheet" media="screen">
+                       <link href="{{ STATIC_URL }}css/app.css"
+                             rel="stylesheet" media="screen">
+                   {% endblock head_css_site %}
+                   {% block head_css_section %}{% endblock head_css_section %}
+                   {% block head_css_page %}{% endblock head_css_page %}
+               {% endblock head_css %}
+
+</head>
+
+<body>
+
+  <header>
+          <div class="navbar navbar-default navbar-static-top
+          {% block nav-style %}{% endblock %}">
+              <div class="container p-none">
+                  <div class="navbar-header">
+                      <button type="button" class="navbar-toggle"
+                              data-toggle="collapse"
+                              data-target=".navbar-collapse">
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                      </button>
+                      <a class="navbar-brand" href="/">CRM Easy</a>
+                  </div>
+                  <div class="collapse navbar-collapse">
+                      <ul class="nav navbar-nav navbar-right">
+                          {% if user.is_authenticated %}
+                              <li><a href="">Logout</a></li>
+                              <li><a href=""
+                                     class="p-r-none">Accounts</a></li>
+                          {% else %}
+                              <li><a href="">Login</a></li>
+                              <li><a href="" class="p-r-none">Sign Up</a></li>
+                          {% endif %}
+                      </ul>
+                  </div>
+              </div>
+          </div>
+      </header>
+
+      <div id="site-wrapper">
+        {% block content %}
+            if you see this, something is wrong!
+        {% endblock content %}
+    </div>
+
+{% block logo_text %}<b>Inversiones</b>BT{% endblock %}
+
+{% block title %}My App{% endblock %}
+<title>{% block title %}{{ site.name }}{% endblock %}</title>
+{% block content %}
+    Just some example content
+{% endblock %}
+
+{% block nav_header %}
+    {% include 'adminlte/lib/_main_header.html' %}
+{% endblock %}
+
+<div class="footer">
+       <div class="container">
+           <p>Copyright CRM Easy</p>
+       </div>
+   </div>
+</body>
+</html>
