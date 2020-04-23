@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<head>
+<style>
+table, th, td {
+  border: 1px solid black;
+ border-collapse: collapse;
+ border-spacing: 5px;
+}
+</style>
+</head>
+<table style="width:100%">
+
+      <th> <h3>Cliente: {{ factura.client }}</h3> </th>
+      <th> <h3>Encargado/a: {{factura.encargado}}</h3> </th>
+      <th> <h3>N° Orden: {{factura.orden}}</h3> </th>
+
+    <tr>
+      <th> <h5>Producto</h5> </th>
+      <th> <h5>Cantidad</h5> </th>
+      <th> <h5>Subtotal</h5> </th>
+    </tr>
+    <tr>
+        {% if factura.orden.articulo.all %}
+          {% for od in factura.orden.articulo.all%}
+            <td><h5>{{od.producto}}</h5> </td>
+            <td><h5>{{od.cantidad}}</h5> </td>
+            <td><h5>{{od.getSubtotal}}</h5> </td>
+          {% endfor %}
+
+        {% endif %}
+      <tr>
+        <td colspan="3"><h4>Total: {{factura.orden.total}}</h4></td>
+
+    </tr>
+
+</table>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Factura</h1>
+    {{factura.cliente}}
+
+{% for factura in factura %}
+  <div class ="post">
+    <h4>
+    <a href="/factura-detail/{{factura.pk}}">
+      {{ factura}}
+    </a>
+  </h4>
+  </div>
+{% endfor %}
+
+
+{% endblock %}

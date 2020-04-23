@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+
+<html>
+<body>
+  {% block content %}
+<p>Estas buscado: <strong>{{ query }}</strong></p>
+<div class="content">
+  <div class="cliente">
+  {% if cliente %}
+      <p>Clientes encontrados: {{ cliente|length }} Cliente{{ cliente|pluralize }}.</p>
+      <ul>
+          {% for cliente in cliente %}
+          <h5><a href="/client-detail/{{cliente.pk}}"><li>{{ cliente.nombre }} {{cliente.apellido}}</li></a></h2>
+          {% endfor %}
+      </ul>
+  {% else %}
+      <p>Ningún Cliente coincide con el criterio de búsqueda.</p>
+  {% endif %}
+
+
+  </div>
+</div>
+{% endblock %}
+</body>
+</html>

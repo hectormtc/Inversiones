@@ -1,52 +1,13 @@
 from django.contrib import admin
-from .models import Phone, Address, Categoria,Producto,Cliente, Encargado, Orden, Factura,Inventario,Articulo, Rol, FacturaInstance, ArticuloInstance
+from .models import Address, Categoria,Producto,Cliente, Encargado, Orden, Factura,Inventario,Articulo, Rol, ArticuloInstance
 
 
-class ArticuloInLine(admin.TabularInline):
-    model = ArticuloInstance
-@admin.register(Articulo)
-
-class ArticuloAdmin(admin.ModelAdmin):
-    list_display = ('producto', 'cantidad')
-    list_filter = ('producto', 'cantidad')
-    inlines = [ArticuloInLine]
 ###########################################
-@admin.register(Orden)
-class OrdenAdmin(admin.ModelAdmin):
-    list_display = ('articulo',)
 
-#############################################
-class FacturaInstanceInLine(admin.TabularInline):
-    model =  FacturaInstance
 ###########################################33#
 @admin.register(Factura)
 class FacturaAdmin(admin.ModelAdmin):
-    list_display  = ('cliente','encargado')
-    fields = [('cliente','encargado')]
-    inlines = [FacturaInstanceInLine]
-    search_fields = ('cliente__nombre','cliente__apellido')
-
-class FacturaInstanceAdmin(admin.ModelAdmin):
-    list_display = ('orden',
-    'estado_de_pago'
-    'estado_de_renta',
-    'date_deliver',
-    'date_receive')
-    list_filter = ('estado_de_renta',
-    'tipo_de_entrega',
-    'pago_pendiente',
-    'estado_de_pago')
-    search_fields = ('nombre','apellido','empresa')
-
-    fieldsets = (
-        (
-        'Estados de pago', {
-        'fields': ('estado_de_pago','pago_pendiente','deposito')
-        }
-
-        )
-
-    )
+    pass
 ################################################33
 
 class ClienteAdmin(admin.ModelAdmin):
@@ -59,14 +20,17 @@ class ClienteAdmin(admin.ModelAdmin):
 admin.site.register(Cliente, ClienteAdmin)
 #######################################################
 
-admin.site.register(Phone)
+#admin.site.register(Phone)
 admin.site.register(Address)
 admin.site.register(Rol)
 admin.site.register(Inventario)
-#admin.site.register(Articulo)
+admin.site.register(Articulo)
 #admin.site.register(Factura)
 admin.site.register(Encargado)
-#admin.site.register(Orden)
+admin.site.register(Orden)
 #admin.site.register(Cliente)
-admin.site.register(Producto)
+@admin.register(Producto)
+class ProductoAdmin(admin.ModelAdmin):
+    list_display = ['producto', 'detalles', 'precio','cantidad','disponible']
+    list_editable = ['precio', 'disponible']
 admin.site.register(Categoria)

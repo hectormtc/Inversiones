@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div class="cliente">
+        <h2>{{ cliente.nombre }} {{cliente.apellido}}</h2>
+        <h5>{{cliente.phone}}</h5>
+
+        {% if cliente.empresa %}
+        <h5>Es empresa</h5>
+        {% endif %}
+    </div>
+{% endblock %}
